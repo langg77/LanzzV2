@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>.LanzzV2</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+
+<!-- LOCKSCREEN -->
+<div class="login-screen" id="lockScreen">
+  <div class="server-info"><i class="fas fa-server"></i><span>Indonesia</span></div>
+  <div class="sky-holo"></div>
+  <div class="source-code"><i class="fas fa-file-code"></i><span>Lanzz</span></div>
+
+  <!-- Login Box -->
+  <div class="login-box" id="loginBox">
+    <h2>Login</h2>
+    <input type="text" id="username" placeholder="User" />
+    <input type="password" id="password" placeholder="Key" />
+    <button onclick="login()">Masuk</button>
+    <p id="loginError" style="color: red; display: none;">User / Key salah!</p>
+    <p><a href="#" onclick="showRegister()">Belum punya akun? Daftar!</a></p>
+  </div>
+
+  <!-- Register Box (disembunyikan dulu) -->
+  <div class="login-box" id="registerBox" style="display: none;">
+    <h2>Daftar</h2>
+    <input type="text" id="regUsername" placeholder="User" />
+    <input type="password" id="regPassword" placeholder="Password" />
+    <input type="password" id="confirmPassword" placeholder="Konfirmasi Password" />
+    <input type="text" id="uniqueCode" placeholder="Kode Unik" />
+    <button onclick="register()">Daftar</button>
+  </div>
+</div>
+
+  <!-- MAIN SCREEN -->
+  <div id="mainScreen" style="display: none;">
+    
+    <!-- Popup Info -->
+    <div id="infoPopup" class="info-popup">
+      <div class="info-box">
+        <p><strong>Source</strong> : <span id="botCode"></span></p>
+        <p><strong>Botname</strong> : <span id="botName"></span></p>
+        <p><strong>Status</strong> : <span id="botStatus"></span></p>
+      </div>
+    </div>
+
+    <!-- Tombol Chat & Info -->
+    <div class="sky-holo-main"></div>
+    <div class="info-bar" id="infoBtn"><i class="fas fa-info-circle"></i><span>Information</span></div>
+    <div class="bot-button" id="botBtn"><i class="fas fa-robot"></i><span>Chat Bot</span></div>
+
+<!-- Chat Screen -->
+<div id="chatScreen" class="chat-screen hidden">
+  <div class="chat-header">
+    <button id="backBtn" class="back-button">Back</button>
+  </div>
+  <div class="chat-body" id="chatBody">
+    <!-- Pesan awal dari bot -->
+    <div class="chat-message bot">
+      <div class="chat-header-row">
+        <span class="username">LanzzV2</span>
+      </div>
+      <span class="message-text">halo ada yang bisa di bantu?</span>
+      <div class="button-group">
+        <button class="chat-option" onclick="handleYes()">Ya</button>
+        <button class="chat-option" onclick="handleNo()">Tidak</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- BUG MENU -->
+    <div class="attack-container" id="attackContainer">
+      <i class="fas fa-sign-out-alt logout-icon" title="Logout" onclick="logout()"></i>
+      <i class="fas fa-history history-icon" title="History"></i>
+      <h2>Bug Menu</h2>
+
+      <input type="text" id="number" placeholder="Masukan nomor target" />
+      <select id="bugType">
+        <option value="Forclose">Forclose</option>
+        <option value="Invisible">Invisible</option>
+        <option value="Crash">Crash</option>
+        <option value="Iosinvis">Iosinvis</option>
+        <option value="Crashios">CrashIos</option>
+      </select>
+      <button id="sendBug">SEND BUG</button>
+
+
+      <div class="wait-text" id="waitText"></div>
+
+      <div class="history-box" id="historyBox" style="display: none;">
+        <div class="history-header">
+          <h4>Riwayat Bug</h4>
+          <i class="fas fa-trash" id="clearHistory" title="Hapus Riwayat" style="cursor: pointer; color: red; float: right;"></i>
+        </div>
+        <ul id="historyList"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- POPUPS -->
+  <div class="popup-overlay" id="popupSendBug" style="display: none;">
+    <div class="popup-box">
+      <h3>Send Bug</h3>
+      <p><strong>Number:</strong> <span id="popupTo"></span></p>
+      <p><strong>Bug Type:</strong> <span id="popupBugType"></span></p>
+      <button onclick="closePopup('popupSendBug')">OK</button>
+    </div>
+  </div>
+
+  <div class="popup-overlay" id="popupError" style="display: none;">
+    <div class="popup-box">
+      <h3>Error</h3>
+      <p id="popupErrorText"></p>
+      <button onclick="closePopup('popupError')">OK</button>
+    </div>
+  </div>
+
+  <div class="popup-overlay" id="popupConfirmDelete" style="display: none;">
+    <div class="popup-box">
+      <h3>Peringatan</h3>
+      <p>Yakin ingin menghapus riwayat?</p>
+      <div class="popup-buttons horizontal">
+        <button id="confirmYes">Ya</button>
+        <button onclick="closePopup('popupConfirmDelete')">Tidak</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="popup-overlay" id="popupConfirmLogout" style="display: none;">
+    <div class="popup-box">
+      <h3>Peringatan</h3>
+      <p>Yakin ingin keluar dari akun?</p>
+      <div class="popup-buttons horizontal">
+        <button id="logoutYes">Ya</button>
+        <button onclick="closePopup('popupConfirmLogout')">Tidak</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
